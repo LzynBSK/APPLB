@@ -2,8 +2,10 @@
   import React, { useRef, useState} from 'react';
   import { Animated, Image, StyleSheet, SafeAreaView,  Text, View, TouchableOpacity } from 'react-native';
   import Profile from "./assets/Eliton.jpg";
-  import { createStackNavigator } from 'react-navigation-stack';
+  import { useNavigation } from '@react-navigation/native';
   import { NavigationContainer } from '@react-navigation/native';
+
+import { createStackNavigator } from '@react-navigation/stack';
 
 
   //Tab Icons...
@@ -18,37 +20,41 @@
   //Fotos...
   import fotoFilmes from "./assets/fotoFilmes.jpg";
 
-  //telas...
-  import Filmes from "./Componentes/FilmesScreen/Filmes";
-  import Series from "./Componentes/SeriesScreen/Series";
-  import Desenhos from "./Componentes/SeriesScreen/Series";
+import ScreenFilmes from './Componentes/FilmesScreen/Filmes';
+import ScreenSeries from './Componentes/SeriesScreen/Series';
+import ScreenDesenhos from './Componentes/DesenhosScreen/Desenhos';
+
 
 
   export default function App() {
     const [currentTab, setCurrentTab] = useState("Home");
 
-    //Navegações
-    const Stack = createStackNavigator();
 
     // To get the curretn Status of menu ...
     const [showMenu, setShowMenu] = useState(false);
 
     // Animated Properties...
 
+    
     const offsetValue = useRef(new Animated.Value(0)).current;
     // Scale Intially must be One...
     const scaleValue = useRef(new Animated.Value(1)).current;
     const closeButtonOffset = useRef(new Animated.Value(0)).current;
 
+
+    const Stack = createStackNavigator();
+
     return (
 
-      <><NavigationContainer>
+      <View>
+      <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Filmes" component={Filmes} />
-          <Stack.Screen name="Series" component={Series} />
-          <Stack.Screen name="Desenhos" component={Desenhos} />
+          <Stack.Screen name="Filmes" component={ScreenFilmes} />
+          <Stack.Screen name="Séries" component={ScreenSeries} />
+          <Stack.Screen name="Desenho" component={ScreenDesenhos} />
         </Stack.Navigator>
-      </NavigationContainer><SafeAreaView style={styles.container}>
+      </NavigationContainer>
+      <SafeAreaView style={styles.container}>
           <View style={{ justifyContent: 'flex-start', padding: 15 }}>
             <Image source={Profile} style={{
               width: 60,
@@ -74,10 +80,10 @@
               flexGrow: 1,
               marginTop: 30
             }}>
-              {TabButton(currentTab, setCurrentTab, "Home", iconHome, navigation)}
-              {TabButton(currentTab, setCurrentTab, "Filmes", iconFilmes, navigation)}
-              {TabButton(currentTab, setCurrentTab, "Series", iconSeries, navigation)}
-              {TabButton(currentTab, setCurrentTab, "Desenhos", iconDesenhos, navigation)}
+              {TabButton(currentTab, setCurrentTab, "Home", iconHome)}
+              {TabButton(currentTab, setCurrentTab, "Filmes", iconFilmes)}
+              {TabButton(currentTab, setCurrentTab, "Series", iconSeries)}
+              {TabButton(currentTab, setCurrentTab, "Desenhos", iconDesenhos)}
 
             </View>
 
@@ -170,21 +176,26 @@
 
           </Animated.View>
 
-        </SafeAreaView></>
+        </SafeAreaView>
+        </View>
     );
   }
 
-  const TabButton = (currentTab, setCurrentTab, title, image)=>{
-    return(
-      <TouchableOpacity onPress={()=>{
-        if(title == "Sair"){
 
-        }
-        else{
-          setCurrentTab(title);
-          navigation.navigate(title);
-        }
-      }}>
+  const TabButton = (currentTab, setCurrentTab, title, image)=>{
+    const navigation = useNavigation();
+  
+    const handlePress = () => {
+      if (title === 'Sair') {
+        // faça algo aqui
+      } else {
+        navigation.navigate(title);
+        setCurrentTab(title);
+      }
+    }
+  
+    return (
+      <TouchableOpacity onPress={handlePress}>
         <View>
           <View style={{
             flexDirection: "row",
@@ -208,9 +219,11 @@
             }}>{title}</Text>
           </View>
         </View>
-        </TouchableOpacity>
+      </TouchableOpacity>
     );
   }
+
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,

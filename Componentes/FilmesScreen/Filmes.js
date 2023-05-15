@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
 
-const Filmes = () => {
+const ScreenFilmes = () => {
   return (
     <ScrollView>
       <View style={styles.cardsContainer}>
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Filmes;
+export default ScreenFilmes;
